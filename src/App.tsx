@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { AuthProvider } from './context/AuthProvider';
+import RegisterPage from './pages/Register/components/RegisterForm';
+import LoginPage from './pages/Login';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import RequireAuth from './components/RequireAuth';
+
+import UserList from './pages/UserList';
+import User from './pages/User';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    
+
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* public routes */}
+        <Route path="" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        {/* we want to protect these routes */}
+        <Route element={<RequireAuth />}>
+          <Route path="/userlist" element={<UserList />}/>
+          <Route path="/user" element={<User />}/>
+        </Route>
+        
+      </Route>
+    </Routes>
+     
   );
 }
 

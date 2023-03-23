@@ -1,0 +1,22 @@
+1. Create registration form functionality fields other than upload photo
+  - formik
+  - implement fetch call for sign up
+  - css
+
+2. Create login page and page routes
+
+3. create upload functionality
+
+
+implement upload image
+
+implement userlist page
+
+implement user details page
+
+implement intercepters with access and refresh token
+
+implement persistent login with session
+
+implement proper error messages and styles
+- wrong login
