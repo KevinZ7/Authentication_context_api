@@ -10,14 +10,6 @@ const LoginPage = () => {
       <Link to="/register">
         <button>Don't Have Account - Signup</button>
       </Link>
-
-      <Link to="/userlist">
-        <button>userList</button>
-      </Link>
-      <Link to="/user">
-        <button>user</button>
-      </Link>
-
     </div>
   )
 }

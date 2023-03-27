@@ -111,7 +111,7 @@ const RegisterForm = () => {
           className={errors.username && touched.username ? "input-error" : ""}
         />
         {errors.username && touched.username && (
-          <p className="error">{errors.username}</p>
+          <p data-testid="input_error" className="error">{errors.username}</p>
         )}
       </div>
 
@@ -127,7 +127,7 @@ const RegisterForm = () => {
           className={errors.password && touched.password ? "input-error" : ""}
         />
         {errors.password && touched.password && (
-          <p className="error">{errors.password}</p>
+          <p data-testid="input_error" className="error">{errors.password}</p>
         )}
       </div>
 
@@ -147,7 +147,7 @@ const RegisterForm = () => {
           }
         />
         {errors.confirm_password && touched.confirm_password && (
-          <p className="error">{errors.confirm_password}</p>
+          <p data-testid="input_error" className="error">{errors.confirm_password}</p>
         )}
       </div>
 
@@ -163,7 +163,7 @@ const RegisterForm = () => {
           className={errors.email && touched.email ? "input-error" : ""}
         />
         {errors.email && touched.email && (
-          <p className="error">{errors.email}</p>
+          <p data-testid="input_error" className="error">{errors.email}</p>
         )}
       </div>
 
@@ -181,7 +181,7 @@ const RegisterForm = () => {
           }
         />
         {errors.first_name && touched.first_name && (
-          <p className="error">{errors.first_name}</p>
+          <p data-testid="input_error" className="error">{errors.first_name}</p>
         )}
       </div>
 
@@ -197,12 +197,13 @@ const RegisterForm = () => {
           className={errors.last_name && touched.last_name ? "input-error" : ""}
         />
         {errors.last_name && touched.last_name && (
-          <p className="error">{errors.last_name}</p>
+          <p data-testid="input_error" className="error">{errors.last_name}</p>
         )}
       </div>
 
       <div>
         <input
+          data-testid="upload_profile_icon"
           id="profile_icon"
           name="profile_icon"
           type="file"

@@ -67,7 +67,7 @@ const LoginForm = () => {
           className={errors.username && touched.username ? "input-error" : ""}
         />
         {errors.username && touched.username && (
-          <p className="error">{errors.username}</p>
+          <p data-testid={"username_error"} className="error">{errors.username}</p>
         )}
       </div>
 
@@ -83,11 +83,11 @@ const LoginForm = () => {
           className={errors.password && touched.password ? "input-error" : ""}
         />
         {errors.password && touched.password && (
-          <p className="error">{errors.password}</p>
+          <p data-testid={"password_error"} className="error">{errors.password}</p>
         )}
       </div>
 
-      {errors.loginFailed && <div>Login Failed</div>}
+      {errors.loginFailed && <div data-testid={"login_error"}>Login Failed</div>}
       
       <button disabled={isSubmitting} type="submit">
         Login
