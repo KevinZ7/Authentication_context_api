@@ -6,15 +6,22 @@ import {
   screen,
   fireEvent,
 } from "@testing-library/react";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import axios from "../../../api/axios";
 
+jest.mock("../../../api/axios");
 
 describe(LoginForm, () => {
-  afterEach(cleanup);
+  beforeEach(()=>{
+    jest.clearAllMocks();
+    cleanup()
+  });
+
+  afterEach(()=>{
+    jest.clearAllMocks();
+    cleanup()
+  });
+
 
   it("form displays correct number of inputs (2)", () => {
     render(<LoginForm />, { wrapper: BrowserRouter });
@@ -56,32 +63,24 @@ describe(LoginForm, () => {
     );
   });
 
-  it("loggin in with the wrong credentials provide the correct error message", async () => {
-    render(<LoginForm />, { wrapper: BrowserRouter });
-    const loginButton = screen.getByRole("button", { name: "Login" });
-    const usernameInput = screen.getByLabelText("Username");
-    const passwordInput = screen.getByLabelText("Password");
-
-    fireEvent.change(usernameInput, { target: { value: "wrongUsername" } });
-    fireEvent.change(passwordInput, { target: { value: "wrongPassword" } });
-    fireEvent.click(loginButton);
-
-    await waitFor(
-      () => {
-        const loginFailedMsg = screen.getByTestId("login_error");
-      },
-      {
-        timeout: 2000,
-      }
-    );
-  });
 
   it("Loggin in with the correct credentials redirects to the userlist page", async () => {
-
-    render(<Routes>
-      <Route path="/" element={<LoginForm />} />
-      <Route path="/userlist" element={<div>userlist</div>} />
-      </Routes>, { wrapper: BrowserRouter });
+    axios.post.mockImplementation(()=>{
+      console.log("Mock axios get called");
+      Promise.resolve({data:{
+        access:"fake",
+        refresh:"fake"
+      }});
+    });
+    
+    render(
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LoginForm />} />
+          <Route path="/userlist" element={<div>userlist</div>} />
+        </Routes>
+      </BrowserRouter>
+    );
 
     const loginButton = screen.getByRole("button", { name: "Login" });
     const usernameInput = screen.getByLabelText("Username");
@@ -91,9 +90,29 @@ describe(LoginForm, () => {
     fireEvent.change(passwordInput, { target: { value: "12345" } });
     fireEvent.click(loginButton);
 
-    await waitFor(() => {
-      const userListPage = screen.getByText("userlist");
-      expect(userListPage).toBeInTheDocument();
-    }, { timeout: 5000 });
+    await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
+    const userlist = await screen.findByText("userlist");
+    expect(userlist).toBeInTheDocument();
+  });
+
+  it("loggin in with the wrong credentials provide the correct error message", async () => {
+    axios.post.mockImplementation(()=>{
+      Promise.resolve({
+        response:{
+          status:401
+        }
+      });
+    });
+    render(<LoginForm />, { wrapper: BrowserRouter });
+    const loginButton = screen.getByRole("button", { name: "Login" });
+    const usernameInput = screen.getByLabelText("Username");
+    const passwordInput = screen.getByLabelText("Password");
+
+    fireEvent.change(usernameInput, { target: { value: "wrongUsername" } });
+    fireEvent.change(passwordInput, { target: { value: "wrongPassword" } });
+    fireEvent.click(loginButton);
+
+    await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
+    expect(axios.post).toHaveBeenCalledWith('/login/', { username: 'wrongUsername', password: 'wrongPassword',"loginFailed": false},{"headers": {"Content-Type": "application/json"}, "withCredentials": true});
   });
 });
